@@ -42,7 +42,9 @@ const CustomerProfile = () => {
     try {
       const res = await axios.get(`${API}/orders/my/all`);
       setOrderCount(res.data.length);
-    } catch (e) {}
+    } catch (e) {
+      // Silent fail
+    }
   };
 
   const handleSubmit = async (e) => {

@@ -17,7 +17,9 @@ const CustomerDashboard = () => {
       try {
         const res = await axios.get(`${API}/orders/my/all`);
         setOrders(res.data);
-      } catch (e) {}
+      } catch (e) {
+        // Silent fail - orders will show empty
+      }
       finally { setLoading(false); }
     };
     fetchOrders();
