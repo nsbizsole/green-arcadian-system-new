@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'axios';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Handshake, DollarSign, TrendingUp, Clock, Check, Banknote } from 'lucide-react';
 import { Button } from '../../components/ui/button';
