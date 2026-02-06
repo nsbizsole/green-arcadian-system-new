@@ -39,7 +39,15 @@ const Shop = () => {
     try {
       const response = await axios.get(`${API}/products`);
       if (response.data.length > 0) {
-        setProducts(response.data);
+        // Merge API products with sample products
+        const apiProducts = response.data;
+        const merged = [...sampleProducts];
+        apiProducts.forEach(p => {
+          if (!merged.find(m => m.id === p.id)) {
+            merged.push(p);
+          }
+        });
+        setProducts(merged);
       }
     } catch (error) {
       // Use sample products
