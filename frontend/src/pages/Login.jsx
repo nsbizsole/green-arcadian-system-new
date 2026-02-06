@@ -133,7 +133,7 @@ const Login = () => {
           </form>
 
           <p className="mt-8 text-center text-muted-foreground">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link to="/register" className="text-primary hover:underline" data-testid="register-link">
               Create one
             </Link>

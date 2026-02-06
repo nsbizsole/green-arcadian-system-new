@@ -101,7 +101,7 @@ const Landing = () => {
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
                 <Zap className="w-4 h-4 text-primary" />
-                <span className="text-sm text-primary">World's Best Green Business Platform</span>
+                <span className="text-sm text-primary">World&apos;s Best Green Business Platform</span>
               </div>
 
               <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
