@@ -1,0 +1,159 @@
+{
+  "brand_identity": {
+    "name": "GreenForge OS",
+    "core_concept": "Bio-Industrial Intelligence",
+    "emotional_archetype": "The Performance Pro (Nature Edition)",
+    "tone": "Precision, Organic, High-Velocity, Growth",
+    "target_audience": "Plantation Owners, Nursery Managers, Landscape Architects",
+    "visual_mood": "Deep Obsidian backgrounds met with Electric Bio-Green data streams. Matte finishes, high contrast, no muddy gradients."
+  },
+  "design_system": {
+    "colors": {
+      "palette_name": "Deep Forest Protocol",
+      "background": {
+        "default": "#050505",
+        "paper": "#0A0A0A",
+        "subtle": "#121212"
+      },
+      "primary": {
+        "DEFAULT": "#2E8B57",
+        "foreground": "#FFFFFF",
+        "active": "#3CB371",
+        "glow": "0 0 20px rgba(46, 139, 87, 0.5)"
+      },
+      "accent": {
+        "DEFAULT": "#00FF41",
+        "foreground": "#000000",
+        "muted": "#1a3320"
+      },
+      "neutral": {
+        "50": "#F8FAFC",
+        "100": "#F1F5F9",
+        "200": "#E2E8F0",
+        "300": "#CBD5E1",
+        "400": "#94A3B8",
+        "500": "#64748B",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1E293B",
+        "900": "#0F172A"
+      },
+      "semantic": {
+        "success": "#22C55E",
+        "warning": "#EAB308",
+        "danger": "#EF4444",
+        "info": "#3B82F6"
+      }
+    },
+    "typography": {
+      "headings": {
+        "family": "Outfit, sans-serif",
+        "weights": ["300", "500", "700"],
+        "usage": "All Hero text, Section Headers, Feature Titles. Use font-light for elegance, font-bold for impact."
+      },
+      "body": {
+        "family": "Manrope, sans-serif",
+        "weights": ["400", "500", "600"],
+        "usage": "Dashboard tables, data grids, long-form content. Optimized for legibility at small sizes."
+      },
+      "mono": {
+        "family": "JetBrains Mono, monospace",
+        "usage": "SKU numbers, API keys, Code snippets, Financial data."
+      }
+    },
+    "spacing": {
+      "scale": "Generous (2x standard)",
+      "container_padding": "p-8 md:p-12 lg:p-16",
+      "element_gap": "gap-6 or gap-8"
+    },
+    "radius": {
+      "default": "0.5rem",
+      "card": "0.75rem",
+      "button": "9999px (Pill)"
+    },
+    "shadows": {
+      "card": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+      "float": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      "glow": "0 0 15px rgba(0, 255, 65, 0.15)"
+    }
+  },
+  "layout_strategies": {
+    "dashboard": {
+      "type": "High Density Grid",
+      "grid_cols": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4",
+      "gap": "gap-4",
+      "rules": "No jagged bottoms. Use col-span-2 for primary charts."
+    },
+    "marketing": {
+      "type": "Bento / Tetris Grid",
+      "grid_cols": "grid-cols-1 md:grid-cols-8 lg:grid-cols-12",
+      "gap": "gap-8",
+      "rules": "Asymmetry is key. Use 'The Tall' and 'The Square' spans to create visual tension."
+    }
+  },
+  "component_overrides": {
+    "Card": {
+      "style": "Flat, 1px border border-white/10, bg-black/40 (glass). No shadow by default.",
+      "hover": "border-accent/50 transition-colors duration-300"
+    },
+    "Button": {
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_10px_rgba(46,139,87,0.3)]",
+      "secondary": "bg-white/5 text-white border border-white/10 hover:bg-white/10"
+    },
+    "Input": {
+      "style": "bg-white/5 border-white/10 focus:border-accent focus:ring-1 focus:ring-accent"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": {
+      "className": "backdrop-blur-xl bg-black/60 border border-white/10",
+      "usage": "Sticky Nav, Modals, Toasts"
+    },
+    "gradients": {
+      "subtle_glow": "bg-gradient-to-tr from-primary/20 via-transparent to-transparent"
+    },
+    "textures": {
+      "noise": "Overlay a subtle SVG noise pattern at 3% opacity on the main background to kill digital flatness."
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "category": "Hero Background",
+        "url": "https://images.unsplash.com/photo-1760661829532-4822e399abed?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBncmVlbmhvdXNlJTIwaW50ZXJpb3IlMjBuaWdodCUyMGxpZ2h0c3xlbnwwfHx8fDE3NzA0MTIyMzJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Modern greenhouse interior with warm night lighting. Use as Hero background with overlay."
+      },
+      {
+        "category": "Feature Context",
+        "url": "https://images.unsplash.com/photo-1758135986599-a78386aa026d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBncmVlbmhvdXNlJTIwaW50ZXJpb3IlMjBuaWdodCUyMGxpZ2h0c3xlbnwwfHx8fDE3NzA0MTIyMzJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Greenhouse walkway. Use for 'Inventory Management' section."
+      },
+      {
+        "category": "User Context",
+        "url": "https://images.unsplash.com/photo-1699297871906-b118f68e9c8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzZ8MHwxfHNlYXJjaHwxfHxsYW5kc2NhcGUlMjBhcmNoaXRlY3QlMjB3b3JraW5nJTIwdGFibGV0JTIwc2l0ZXxlbnwwfHx8fDE3NzA0MTIyMzN8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Plants on table. Abstract representation of nature."
+      }
+    ],
+    "icons": {
+      "library": "lucide-react",
+      "style": "Stroke width 1.5px. Use text-accent for active icons."
+    }
+  },
+  "instructions_to_main_agent": [
+    "INSTALL FONTS: Add @import statements for 'Outfit' and 'Manrope' in src/index.css immediately.",
+    "THEME SETUP: Override tailwind.config.js with the 'Deep Forest Protocol' colors defined above.",
+    "MARKETING PAGE: Build the Landing Page using the 'Tetris Grid'. Do not use standard Shadcn Cards here. Use raw HTML/Tailwind.",
+    "DASHBOARD: Use Shadcn components (Sidebar, Card, Table) but heavily customized with the 'Component Overrides' styles.",
+    "MOTION: Use framer-motion for page transitions and staggering list items. Add `layout` prop to grid items for smooth resizing.",
+    "ACCESSIBILITY: Ensure the Neon Green text is never used on white backgrounds. Only use it on Dark Gray/Black.",
+    "NO INTER: Do not use Inter font for headings. Use Outfit."
+  ],
+  "universal_guidelines": [
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "Every interaction needs micro-animations - hover states, transitions. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠 in UI."
+  ]
+}
