@@ -1,83 +1,70 @@
-# GreenForge OS - Product Requirements Document
+# Green Arcadian - Product Requirements Document
 
 ## Overview
-GreenForge OS is a comprehensive multi-tenant platform for green businesses including plantation, nursery, landscaping, and maintenance operations.
+Green Arcadian is a plantation and flower export company website and management system. It is NOT a SaaS platform - it serves the specific needs of one plantation/floristry business.
 
 ## Original Problem Statement
-Build "GreenForge OS" - World's Best Green Business Platform for managing plant nursery inventory, landscaping projects, AMC maintenance subscriptions, sales partner commissions, B2B/B2C e-commerce, export compliance, and value-added production.
+Build a complete website and management system for a plantation and flower exporting company with:
+- Public website showcasing the plantation
+- Online store for flowers, plants, and arrangements
+- Internal admin system for inventory, orders, customers, and export documentation
 
 ## User Personas
-1. **Nursery Owner/Admin** - Manages inventory, staff, and business operations
-2. **Sales Partners** - Track deals and commissions
-3. **Project Managers** - Handle landscaping projects and work orders
-4. **Customers (B2B/B2C)** - Purchase plants and gift sets via e-commerce
+1. **Website Visitors** - Retail customers browsing and purchasing flowers
+2. **Wholesale Buyers** - B2B customers placing bulk orders
+3. **Export Clients** - International buyers requiring export documentation
+4. **Admin Staff** - Managing inventory, orders, customers
 
 ## Core Requirements (Static)
-- Multi-tenant architecture with tenant isolation
-- JWT-based authentication
-- Plant inventory with stock management and reservations
-- CRM pipeline with dynamic quote builder
-- Project management with task tracking
-- AMC subscription management with auto-billing
-- Partner commission tracking with deal locking
-- E-commerce storefront for B2B/B2C
-- Courses/learning platform
+- Company branding with botanical/organic aesthetic
+- Product catalog with categories (Bouquets, Roses, Orchids, Plants, etc.)
+- Shopping cart and checkout flow
+- Contact form for inquiries
+- Admin dashboard with business metrics
+- Inventory management
+- Order processing
+- Customer database
+- Export documentation (packing lists, phytosanitary certificates)
 
 ## What's Been Implemented (Feb 6, 2026)
 
-### Backend (FastAPI + MongoDB)
-- ✅ Authentication system (register, login, JWT tokens)
-- ✅ Multi-tenant data isolation
-- ✅ Dashboard statistics API
-- ✅ Plant Inventory CRUD with reservations
-- ✅ CRM Leads & Quotes management
-- ✅ Project & Task management
-- ✅ Partner & Deal tracking
-- ✅ AMC Subscriptions & Invoice generation
-- ✅ E-commerce Products & Orders
-- ✅ Courses API
+### Public Website
+- ✅ Homepage with hero, featured products, about section
+- ✅ Shop page with product grid and category filters
+- ✅ Product detail pages with add to cart
+- ✅ About Us page
+- ✅ Export Services page
+- ✅ Contact page with inquiry form
+- ✅ Shopping cart
+- ✅ Checkout flow
 
-### Frontend (React + Tailwind + Shadcn)
-- ✅ Landing page with product showcase
-- ✅ Authentication (Login/Register)
-- ✅ Dashboard with KPI cards
-- ✅ Inventory management page
-- ✅ CRM Pipeline with Kanban view
-- ✅ Projects management
-- ✅ Partners & Commission tracking
-- ✅ AMC Billing management
-- ✅ Public Store page
-- ✅ Public Courses page
-- ✅ Settings page
+### Admin Portal
+- ✅ Login authentication
+- ✅ Dashboard with KPIs (products, orders, customers, inquiries, revenue)
+- ✅ Inventory management (CRUD for products)
+- ✅ Orders management with status updates
+- ✅ Customers database
+- ✅ Export documents management
+- ✅ Inquiries management
 
-## Prioritized Backlog
+### Backend APIs
+- ✅ Authentication (login/register)
+- ✅ Public product catalog
+- ✅ Public order submission
+- ✅ Contact inquiries
+- ✅ Admin dashboard stats
+- ✅ CRUD for inventory, orders, customers, export docs
 
-### P0 (Critical)
-- [x] Core authentication
-- [x] Multi-tenant isolation
-- [x] Basic CRUD for all modules
-
-### P1 (High Priority)
-- [ ] Stripe payment integration
-- [ ] Email notifications
-- [ ] Export compliance (phytosanitary docs)
-- [ ] PDF invoice generation
-
-### P2 (Medium Priority)
-- [ ] Mobile-responsive offline crew app
-- [ ] Gantt chart visualization for projects
-- [ ] Bulk import/export for inventory
-- [ ] Customer portal
-
-### P3 (Nice to Have)
-- [ ] AI-powered recommendations
-- [ ] Advanced reporting & analytics
-- [ ] White-label customization
-- [ ] Multi-currency support
+## Design Theme
+- Light botanical theme with cream/paper background (#F9F8F6)
+- Deep forest green primary color (#1A3C34)
+- Lime accent (#D4F248)
+- Terracotta highlight (#C86B56)
+- Typography: Cormorant Garamond (headings), Manrope (body), Outfit (UI)
 
 ## Next Tasks
-1. Stripe integration for e-commerce payments
-2. PDF invoice generation for AMC billing
-3. Email notifications (SendGrid/Resend)
-4. Advanced search and filtering
-5. Data export functionality
+1. Payment integration (Stripe) for online orders
+2. Email notifications for orders and inquiries
+3. PDF generation for export documents
+4. Image upload for products
+5. Order tracking for customers
