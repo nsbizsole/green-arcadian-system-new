@@ -18,6 +18,10 @@ Build a comprehensive internal business management system for a plantation and f
 
 ### ✅ Public Website (100%)
 - Home page with hero section and service highlights
+- Full navigation bar with all pages (Home, Shop, About, Export, Contact)
+- **Sign In / Sign Up buttons** in navbar for guests
+- **User dropdown menu** when logged in (Dashboard, Profile, Sign Out)
+- Mobile-responsive hamburger menu
 - Shop page with product grid and category filtering
 - Product detail pages
 - About, Contact, Export services pages
