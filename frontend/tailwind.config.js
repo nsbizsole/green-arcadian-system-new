@@ -5,9 +5,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['Outfit', 'sans-serif'],
+        heading: ['Cormorant Garamond', 'serif'],
         body: ['Manrope', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        ui: ['Outfit', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -16,8 +16,9 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#1A3C34",
+          foreground: "#FFFFFF",
+          light: "#2A5C4A",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -32,9 +33,10 @@ module.exports = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#D4F248",
+          foreground: "#1A3C34",
         },
+        terracotta: "#C86B56",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -43,9 +45,8 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        success: "hsl(var(--success))",
-        warning: "hsl(var(--warning))",
-        info: "hsl(var(--info))",
+        surface: "#E2E8E4",
+        paper: "#F9F8F6",
       },
       borderRadius: {
         lg: "var(--radius)",
