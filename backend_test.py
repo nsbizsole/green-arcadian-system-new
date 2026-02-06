@@ -5,7 +5,7 @@ import sys
 import json
 from datetime import datetime
 
-class GreenForgeAPITester:
+class GreenArcadianAPITester:
     def __init__(self, base_url="https://greenscale-co.preview.emergentagent.com/api"):
         self.base_url = base_url
         self.token = None
@@ -69,43 +69,60 @@ class GreenForgeAPITester:
         """Test API health endpoint"""
         return self.run_test("API Health Check", "GET", "/health", 200, auth_required=False)
 
-    def test_user_registration(self):
-        """Test user registration"""
-        timestamp = datetime.now().strftime('%H%M%S')
-        test_user = {
-            "email": f"test_user_{timestamp}@greenforge.com",
-            "password": "TestPassword123!",
-            "full_name": f"Test User {timestamp}",
-            "company_name": f"Test Company {timestamp}"
-        }
-        
-        success, response = self.run_test(
-            "User Registration", 
-            "POST", 
-            "/auth/register", 
-            200, 
-            test_user, 
-            auth_required=False
-        )
-        
-        if success and 'token' in response:
-            self.token = response['token']
-            self.user_data = response['user']
-            self.log(f"Registered user: {test_user['email']}")
-            return True, response
-        return False, {}
+    def test_root_endpoint(self):
+        """Test root API endpoint"""
+        return self.run_test("API Root", "GET", "/", 200, auth_required=False)
 
-    def test_user_login(self):
-        """Test user login with existing test user"""
+    # Public Endpoints Tests
+    def test_public_products(self):
+        """Test public products endpoint"""
+        return self.run_test("Get Public Products", "GET", "/products", 200, auth_required=False)
+
+    def test_categories(self):
+        """Test categories endpoint"""
+        return self.run_test("Get Categories", "GET", "/categories", 200, auth_required=False)
+
+    def test_create_inquiry(self):
+        """Test creating inquiry"""
+        inquiry_data = {
+            "name": "Test User",
+            "email": "test@example.com",
+            "phone": "+1234567890",
+            "company": "Test Company", 
+            "inquiry_type": "general",
+            "message": "This is a test inquiry"
+        }
+        return self.run_test("Create Inquiry", "POST", "/inquiries", 200, inquiry_data, auth_required=False)
+
+    def test_create_public_order(self):
+        """Test creating public order"""
+        order_data = {
+            "customer_name": "Test Customer",
+            "customer_email": "customer@example.com",
+            "customer_phone": "+1234567890",
+            "customer_address": "123 Test Street, Test City",
+            "items": [
+                {"id": "1", "name": "Test Product", "price": 50, "quantity": 2}
+            ],
+            "subtotal": 100.0,
+            "shipping": 10.0,
+            "total": 110.0,
+            "notes": "Test order"
+        }
+        return self.run_test("Create Public Order", "POST", "/orders/public", 200, order_data, auth_required=False)
+
+    # Auth Tests
+    def test_admin_login(self):
+        """Test admin login with provided credentials"""
         login_data = {
-            "email": "test@greenforge.com",
+            "email": "test@greenarcadian.com",
             "password": "test123"
         }
         
         success, response = self.run_test(
-            "User Login",
+            "Admin Login",
             "POST",
-            "/auth/login",
+            "/auth/login", 
             200,
             login_data,
             auth_required=False
@@ -114,6 +131,34 @@ class GreenForgeAPITester:
         if success and 'token' in response:
             self.token = response['token']
             self.user_data = response['user']
+            self.log(f"Logged in as: {response['user']['email']}")
+            return True, response
+        return False, {}
+
+    def test_user_registration(self):
+        """Test user registration"""
+        timestamp = datetime.now().strftime('%H%M%S')
+        test_user = {
+            "email": f"test_user_{timestamp}@greenarcadian.com",
+            "password": "TestPassword123!",
+            "full_name": f"Test User {timestamp}",
+            "role": "admin"
+        }
+        
+        success, response = self.run_test(
+            "User Registration",
+            "POST", 
+            "/auth/register",
+            200,
+            test_user,
+            auth_required=False
+        )
+        
+        if success and 'token' in response:
+            # Store token for later use if login fails
+            if not self.token:
+                self.token = response['token']
+                self.user_data = response['user']
             return True, response
         return False, {}
 
@@ -121,256 +166,135 @@ class GreenForgeAPITester:
         """Test getting user profile"""
         return self.run_test("Get User Profile", "GET", "/auth/me", 200)
 
-    def test_dashboard_stats(self):
-        """Test dashboard statistics"""
-        return self.run_test("Dashboard Stats", "GET", "/dashboard/stats", 200)
+    # Admin Tests  
+    def test_admin_dashboard(self):
+        """Test admin dashboard stats"""
+        return self.run_test("Admin Dashboard Stats", "GET", "/admin/dashboard", 200)
 
-    def test_inventory_operations(self):
-        """Test inventory CRUD operations"""
-        results = []
-        
-        # Test get plants (empty list is OK)
-        success, _ = self.run_test("Get Plants", "GET", "/inventory/plants", 200)
-        results.append(success)
-        
-        # Test create plant
-        plant_data = {
-            "name": "Test Monstera",
-            "scientific_name": "Monstera deliciosa",
-            "category": "Indoor Plants",
-            "growth_stage": "mature",
-            "price": 45.99,
-            "cost": 20.00,
-            "quantity": 10,
-            "min_stock": 5,
-            "location": "greenhouse-1",
-            "description": "Beautiful test plant"
+    def test_admin_inventory_get(self):
+        """Test getting inventory"""
+        return self.run_test("Get Admin Inventory", "GET", "/admin/inventory", 200)
+
+    def test_admin_inventory_create(self):
+        """Test creating product in inventory"""
+        product_data = {
+            "name": "Test Rose Bouquet",
+            "category": "Bouquets",
+            "price": 75.99,
+            "description": "Beautiful test bouquet",
+            "care_info": "Keep in cool place",
+            "image_url": "https://example.com/test-rose.jpg",
+            "stock": 25,
+            "unit": "piece",
+            "is_featured": True,
+            "is_available": True
         }
         
-        success, response = self.run_test("Create Plant", "POST", "/inventory/plants", 200, plant_data)
-        results.append(success)
+        success, response = self.run_test(
+            "Create Product",
+            "POST",
+            "/admin/inventory",
+            200,
+            product_data
+        )
         
         if success and 'id' in response:
-            plant_id = response['id']
+            # Test get specific product
+            product_id = response['id']
+            self.run_test(f"Get Product {product_id}", "GET", f"/products/{product_id}", 200, auth_required=False)
             
-            # Test get specific plant
-            success, _ = self.run_test(f"Get Plant {plant_id}", "GET", f"/inventory/plants/{plant_id}", 200)
-            results.append(success)
+            # Test update product
+            update_data = {"price": 79.99, "stock": 30}
+            self.run_test(f"Update Product {product_id}", "PUT", f"/admin/inventory/{product_id}", 200, update_data)
             
-            # Test update plant
-            update_data = {"quantity": 15, "price": 49.99}
-            success, _ = self.run_test(f"Update Plant {plant_id}", "PUT", f"/inventory/plants/{plant_id}", 200, update_data)
-            results.append(success)
-            
-            # Test get categories and locations
-            success, _ = self.run_test("Get Categories", "GET", "/inventory/categories", 200)
-            results.append(success)
-            
-            success, _ = self.run_test("Get Locations", "GET", "/inventory/locations", 200)
-            results.append(success)
+            return True, response
         
-        return all(results)
+        return success, response
 
-    def test_crm_operations(self):
-        """Test CRM CRUD operations"""
-        results = []
-        
-        # Test get leads
-        success, _ = self.run_test("Get Leads", "GET", "/crm/leads", 200)
-        results.append(success)
-        
-        # Test create lead
-        lead_data = {
-            "name": "John Smith",
-            "email": "john.smith@example.com",
+    def test_admin_orders(self):
+        """Test admin orders endpoint"""
+        return self.run_test("Get Admin Orders", "GET", "/admin/orders", 200)
+
+    def test_admin_customers_get(self):
+        """Test getting customers"""
+        return self.run_test("Get Admin Customers", "GET", "/admin/customers", 200)
+
+    def test_admin_customers_create(self):
+        """Test creating customer"""
+        customer_data = {
+            "name": "Test Customer",
+            "email": "testcustomer@example.com",
             "phone": "+1234567890",
-            "company": "Smith Gardens",
-            "source": "website",
-            "notes": "Interested in landscape design"
+            "company": "Test Company",
+            "address": "123 Test Street",
+            "customer_type": "retail",
+            "notes": "Test customer record"
         }
-        
-        success, response = self.run_test("Create Lead", "POST", "/crm/leads", 200, lead_data)
-        results.append(success)
-        
-        if success and 'id' in response:
-            lead_id = response['id']
-            
-            # Test update lead status
-            update_data = {"status": "contacted"}
-            success, _ = self.run_test(f"Update Lead {lead_id}", "PUT", f"/crm/leads/{lead_id}", 200, update_data)
-            results.append(success)
-        
-        return all(results)
+        return self.run_test("Create Customer", "POST", "/admin/customers", 200, customer_data)
 
-    def test_project_operations(self):
-        """Test Project management operations"""
-        results = []
-        
-        # Test get projects
-        success, _ = self.run_test("Get Projects", "GET", "/projects", 200)
-        results.append(success)
-        
-        # Test create project
-        project_data = {
-            "name": "Garden Redesign Project",
-            "client_name": "Jane Doe",
-            "client_email": "jane.doe@example.com",
-            "description": "Complete backyard redesign",
-            "start_date": "2026-01-15T00:00:00Z",
-            "end_date": "2026-03-15T00:00:00Z",
-            "budget": 5000.00,
-            "project_type": "landscaping"
-        }
-        
-        success, response = self.run_test("Create Project", "POST", "/projects", 200, project_data)
-        results.append(success)
-        
-        if success and 'id' in response:
-            project_id = response['id']
-            
-            # Test get specific project
-            success, _ = self.run_test(f"Get Project {project_id}", "GET", f"/projects/{project_id}", 200)
-            results.append(success)
-            
-            # Test get project tasks
-            success, _ = self.run_test(f"Get Project Tasks", "GET", f"/projects/{project_id}/tasks", 200)
-            results.append(success)
-        
-        return all(results)
+    def test_admin_inquiries(self):
+        """Test admin inquiries endpoint"""
+        return self.run_test("Get Admin Inquiries", "GET", "/admin/inquiries", 200)
 
-    def test_partner_operations(self):
-        """Test Partner management operations"""
-        results = []
-        
-        # Test get partners
-        success, _ = self.run_test("Get Partners", "GET", "/partners", 200)
-        results.append(success)
-        
-        # Test create partner
-        partner_data = {
-            "name": "Mike Johnson",
-            "email": "mike.johnson@example.com",
-            "phone": "+1987654321",
-            "company": "Johnson Sales",
-            "commission_rate": 12.5
-        }
-        
-        success, response = self.run_test("Create Partner", "POST", "/partners", 200, partner_data)
-        results.append(success)
-        
-        if success and 'id' in response:
-            partner_id = response['id']
-            
-            # Test get specific partner
-            success, _ = self.run_test(f"Get Partner {partner_id}", "GET", f"/partners/{partner_id}", 200)
-            results.append(success)
-        
-        return all(results)
-
-    def test_amc_operations(self):
-        """Test AMC subscription operations"""
-        results = []
-        
-        # Test get subscriptions
-        success, _ = self.run_test("Get AMC Subscriptions", "GET", "/amc/subscriptions", 200)
-        results.append(success)
-        
-        # Test create subscription
-        subscription_data = {
-            "client_name": "Green Valley Resort",
-            "client_email": "manager@greenvalley.com",
-            "client_phone": "+1555000123",
-            "service_type": "lawn_maintenance",
-            "frequency": "monthly",
-            "amount": 250.00,
-            "start_date": "2026-01-01T00:00:00Z",
-            "property_address": "123 Valley Road, Green City",
-            "notes": "Monthly lawn care service"
-        }
-        
-        success, response = self.run_test("Create AMC Subscription", "POST", "/amc/subscriptions", 200, subscription_data)
-        results.append(success)
-        
-        # Test get invoices
-        success, _ = self.run_test("Get AMC Invoices", "GET", "/amc/invoices", 200)
-        results.append(success)
-        
-        return all(results)
-
-    def test_store_operations(self):
-        """Test E-commerce store operations"""
-        results = []
-        
-        # Test get products (public endpoint)
-        success, _ = self.run_test("Get Store Products", "GET", "/store/products", 200, auth_required=False)
-        results.append(success)
-        
-        # Test get orders (requires auth)
-        success, _ = self.run_test("Get Orders", "GET", "/store/orders", 200)
-        results.append(success)
-        
-        return all(results)
-
-    def test_courses_operations(self):
-        """Test Courses operations"""
-        results = []
-        
-        # Test get courses (public endpoint)
-        success, _ = self.run_test("Get Courses", "GET", "/courses", 200, auth_required=False)
-        results.append(success)
-        
-        return all(results)
+    def test_admin_exports(self):
+        """Test admin export docs endpoint"""
+        return self.run_test("Get Admin Export Docs", "GET", "/admin/exports", 200)
 
     def run_comprehensive_tests(self):
         """Run all API tests"""
-        self.log("🚀 Starting GreenForge OS API Tests")
-        self.log("=" * 50)
+        self.log("🚀 Starting Green Arcadian API Tests")
+        self.log("=" * 60)
         
-        # Health check (no auth required)
+        # Test public endpoints first
+        self.log("\n🌍 Testing Public Endpoints")
+        self.test_root_endpoint()
         self.test_health_check()
+        self.test_public_products()
+        self.test_categories()
+        self.test_create_inquiry()
+        self.test_create_public_order()
         
-        # Try login with existing test user first
-        login_success, _ = self.test_user_login()
+        # Try admin login first
+        self.log("\n🔐 Testing Authentication")
+        login_success, _ = self.test_admin_login()
         
         # If login fails, try registration
         if not login_success:
-            self.log("Login with test user failed, trying registration")
+            self.log("Admin login failed, trying registration")
             reg_success, _ = self.test_user_registration()
             if not reg_success:
-                self.log("❌ Cannot authenticate - stopping tests", "CRITICAL")
-                return
+                self.log("❌ Cannot authenticate - stopping admin tests", "CRITICAL")
+                # Still continue with summary of public tests
+            else:
+                login_success = True
         
-        # Profile tests
-        self.test_get_profile()
-        
-        # Dashboard tests
-        self.test_dashboard_stats()
-        
-        # Feature module tests
-        self.log("\n📊 Testing Inventory Module")
-        self.test_inventory_operations()
-        
-        self.log("\n👥 Testing CRM Module")
-        self.test_crm_operations()
-        
-        self.log("\n📋 Testing Projects Module")  
-        self.test_project_operations()
-        
-        self.log("\n🤝 Testing Partners Module")
-        self.test_partner_operations()
-        
-        self.log("\n📅 Testing AMC Module")
-        self.test_amc_operations()
-        
-        self.log("\n🛒 Testing Store Module")
-        self.test_store_operations()
-        
-        self.log("\n🎓 Testing Courses Module")
-        self.test_courses_operations()
+        # Test authenticated endpoints
+        if login_success and self.token:
+            self.test_get_profile()
+            
+            self.log("\n📊 Testing Admin Dashboard")
+            self.test_admin_dashboard()
+            
+            self.log("\n📦 Testing Admin Inventory")
+            self.test_admin_inventory_get()
+            self.test_admin_inventory_create()
+            
+            self.log("\n🛒 Testing Admin Orders")
+            self.test_admin_orders()
+            
+            self.log("\n👥 Testing Admin Customers")
+            self.test_admin_customers_get()
+            self.test_admin_customers_create()
+            
+            self.log("\n📧 Testing Admin Inquiries")
+            self.test_admin_inquiries()
+            
+            self.log("\n📋 Testing Admin Export Docs")
+            self.test_admin_exports()
         
         # Summary
-        self.log("\n" + "=" * 50)
-        self.log(f"📊 Tests Summary:")
+        self.log("\n" + "=" * 60)
+        self.log(f"📊 Green Arcadian API Tests Summary:")
         self.log(f"Total Tests: {self.tests_run}")
         self.log(f"Passed: {self.tests_passed}")
         self.log(f"Failed: {len(self.failed_tests)}")
@@ -378,13 +302,19 @@ class GreenForgeAPITester:
         
         if self.failed_tests:
             self.log("\n❌ Failed Tests:")
-            for failure in self.failed_tests[:5]:  # Show first 5 failures
-                self.log(f"  - {failure.get('test', 'Unknown')}: {failure}")
+            for failure in self.failed_tests:
+                test_name = failure.get('test', 'Unknown')
+                if 'error' in failure:
+                    self.log(f"  - {test_name}: {failure['error']}")
+                else:
+                    self.log(f"  - {test_name}: Expected {failure.get('expected')}, got {failure.get('actual')}")
+                    if failure.get('response'):
+                        self.log(f"    Response: {failure['response']}")
         
         return self.tests_passed, self.tests_run, self.failed_tests
 
 def main():
-    tester = GreenForgeAPITester()
+    tester = GreenArcadianAPITester()
     passed, total, failures = tester.run_comprehensive_tests()
     
     # Exit code: 0 if all passed, 1 if any failed
