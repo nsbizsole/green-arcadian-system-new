@@ -14,18 +14,45 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 
 // Auth Pages
-import Login from "./pages/Login";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import PendingApproval from "./pages/auth/PendingApproval";
 
-// Admin Pages
-import AdminLayout from "./components/AdminLayout";
-import Dashboard from "./pages/admin/Dashboard";
-import Inventory from "./pages/admin/Inventory";
-import Orders from "./pages/admin/Orders";
-import Customers from "./pages/admin/Customers";
-import ExportDocs from "./pages/admin/ExportDocs";
-import Inquiries from "./pages/admin/Inquiries";
+// Admin Portal
+import AdminLayout from "./components/portals/AdminLayout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminUsers from "./pages/admin/Users";
+import AdminInventory from "./pages/admin/Inventory";
+import AdminProjects from "./pages/admin/Projects";
+import AdminAMC from "./pages/admin/AMC";
+import AdminPartners from "./pages/admin/Partners";
+import AdminOrders from "./pages/admin/Orders";
+import AdminRFQ from "./pages/admin/RFQ";
+import AdminExports from "./pages/admin/Exports";
+import AdminProduction from "./pages/admin/Production";
+import AdminInquiries from "./pages/admin/Inquiries";
+import AdminSettings from "./pages/admin/Settings";
 
-const ProtectedRoute = ({ children }) => {
+// Partner Portal
+import PartnerLayout from "./components/portals/PartnerLayout";
+import PartnerDashboard from "./pages/partner/Dashboard";
+import PartnerDeals from "./pages/partner/Deals";
+import PartnerProfile from "./pages/partner/Profile";
+
+// Crew Portal
+import CrewLayout from "./components/portals/CrewLayout";
+import CrewDashboard from "./pages/crew/Dashboard";
+import CrewTasks from "./pages/crew/Tasks";
+import CrewLogs from "./pages/crew/Logs";
+import CrewProfile from "./pages/crew/Profile";
+
+// Customer Portal
+import CustomerLayout from "./components/portals/CustomerLayout";
+import CustomerDashboard from "./pages/customer/Dashboard";
+import CustomerOrders from "./pages/customer/Orders";
+import CustomerProfile from "./pages/customer/Profile";
+
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
   
   if (loading) {
@@ -38,6 +65,23 @@ const ProtectedRoute = ({ children }) => {
   
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+  
+  if (user.status === "pending") {
+    return <Navigate to="/pending" replace />;
+  }
+  
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    // Redirect to appropriate portal based on role
+    const portalRoutes = {
+      admin: "/admin",
+      manager: "/admin",
+      partner: "/partner",
+      crew: "/crew",
+      customer: "/customer",
+      vendor: "/vendor"
+    };
+    return <Navigate to={portalRoutes[user.role] || "/"} replace />;
   }
   
   return children;
@@ -58,15 +102,45 @@ function AppRoutes() {
       
       {/* Auth */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/pending" element={<PendingApproval />} />
       
-      {/* Admin Routes */}
-      <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-        <Route index element={<Dashboard />} />
-        <Route path="inventory" element={<Inventory />} />
-        <Route path="orders" element={<Orders />} />
-        <Route path="customers" element={<Customers />} />
-        <Route path="exports" element={<ExportDocs />} />
-        <Route path="inquiries" element={<Inquiries />} />
+      {/* Admin Portal */}
+      <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin", "manager"]}><AdminLayout /></ProtectedRoute>}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsers />} />
+        <Route path="inventory" element={<AdminInventory />} />
+        <Route path="projects" element={<AdminProjects />} />
+        <Route path="amc" element={<AdminAMC />} />
+        <Route path="partners" element={<AdminPartners />} />
+        <Route path="orders" element={<AdminOrders />} />
+        <Route path="rfq" element={<AdminRFQ />} />
+        <Route path="exports" element={<AdminExports />} />
+        <Route path="production" element={<AdminProduction />} />
+        <Route path="inquiries" element={<AdminInquiries />} />
+        <Route path="settings" element={<AdminSettings />} />
+      </Route>
+      
+      {/* Partner Portal */}
+      <Route path="/partner" element={<ProtectedRoute allowedRoles={["partner"]}><PartnerLayout /></ProtectedRoute>}>
+        <Route index element={<PartnerDashboard />} />
+        <Route path="deals" element={<PartnerDeals />} />
+        <Route path="profile" element={<PartnerProfile />} />
+      </Route>
+      
+      {/* Crew Portal */}
+      <Route path="/crew" element={<ProtectedRoute allowedRoles={["crew"]}><CrewLayout /></ProtectedRoute>}>
+        <Route index element={<CrewDashboard />} />
+        <Route path="tasks" element={<CrewTasks />} />
+        <Route path="logs" element={<CrewLogs />} />
+        <Route path="profile" element={<CrewProfile />} />
+      </Route>
+      
+      {/* Customer Portal */}
+      <Route path="/customer" element={<ProtectedRoute allowedRoles={["customer"]}><CustomerLayout /></ProtectedRoute>}>
+        <Route index element={<CustomerDashboard />} />
+        <Route path="orders" element={<CustomerOrders />} />
+        <Route path="profile" element={<CustomerProfile />} />
       </Route>
       
       <Route path="*" element={<Navigate to="/" replace />} />
