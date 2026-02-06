@@ -409,7 +409,7 @@ async def create_plant(plant: PlantCreate, user: dict = Depends(get_current_user
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     await db.plants.insert_one(plant_doc)
-    del plant_doc["_id"] if "_id" in plant_doc else None
+    plant_doc.pop("_id", None)
     return plant_doc
 
 @api_router.get("/inventory/plants/{plant_id}")
@@ -465,7 +465,7 @@ async def create_reservation(reservation: ReservationCreate, user: dict = Depend
         {"$inc": {"reserved": reservation.quantity}}
     )
     
-    del reservation_doc["_id"] if "_id" in reservation_doc else None
+    reservation_doc.pop("_id", None)
     return reservation_doc
 
 @api_router.get("/inventory/reservations")
@@ -525,7 +525,7 @@ async def create_lead(lead: LeadCreate, user: dict = Depends(get_current_user)):
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     await db.leads.insert_one(lead_doc)
-    del lead_doc["_id"] if "_id" in lead_doc else None
+    lead_doc.pop("_id", None)
     return lead_doc
 
 @api_router.get("/crm/leads/{lead_id}")
@@ -576,7 +576,7 @@ async def create_quote(quote: QuoteCreate, user: dict = Depends(get_current_user
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.quotes.insert_one(quote_doc)
-    del quote_doc["_id"] if "_id" in quote_doc else None
+    quote_doc.pop("_id", None)
     return quote_doc
 
 @api_router.put("/crm/quotes/{quote_id}/status")
@@ -612,7 +612,7 @@ async def create_project(project: ProjectCreate, user: dict = Depends(get_curren
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     await db.projects.insert_one(project_doc)
-    del project_doc["_id"] if "_id" in project_doc else None
+    project_doc.pop("_id", None)
     return project_doc
 
 @api_router.get("/projects/{project_id}")
@@ -659,7 +659,7 @@ async def create_task(task: TaskCreate, user: dict = Depends(get_current_user)):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.tasks.insert_one(task_doc)
-    del task_doc["_id"] if "_id" in task_doc else None
+    task_doc.pop("_id", None)
     return task_doc
 
 @api_router.put("/projects/tasks/{task_id}")
@@ -696,7 +696,7 @@ async def create_partner(partner: PartnerCreate, user: dict = Depends(get_curren
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.partners.insert_one(partner_doc)
-    del partner_doc["_id"] if "_id" in partner_doc else None
+    partner_doc.pop("_id", None)
     return partner_doc
 
 @api_router.get("/partners/{partner_id}")
@@ -734,7 +734,7 @@ async def create_deal(partner_id: str, deal: Dict[str, Any], user: dict = Depend
         {"$inc": {"total_sales": deal.get("amount", 0), "pending_commission": commission}}
     )
     
-    del deal_doc["_id"] if "_id" in deal_doc else None
+    deal_doc.pop("_id", None)
     return deal_doc
 
 @api_router.get("/partners/{partner_id}/deals")
@@ -796,7 +796,7 @@ async def create_amc_subscription(subscription: AMCSubscriptionCreate, user: dic
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.amc_subscriptions.insert_one(sub_doc)
-    del sub_doc["_id"] if "_id" in sub_doc else None
+    sub_doc.pop("_id", None)
     return sub_doc
 
 @api_router.get("/amc/subscriptions/{sub_id}")
@@ -843,7 +843,7 @@ async def generate_amc_invoice(sub_id: str, user: dict = Depends(get_current_use
         {"$set": {"next_billing_date": next_billing.isoformat()}}
     )
     
-    del invoice["_id"] if "_id" in invoice else None
+    invoice.pop("_id", None)
     return invoice
 
 @api_router.get("/amc/invoices")
@@ -881,7 +881,7 @@ async def create_product(product: ProductCreate, user: dict = Depends(get_curren
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.products.insert_one(product_doc)
-    del product_doc["_id"] if "_id" in product_doc else None
+    product_doc.pop("_id", None)
     return product_doc
 
 @api_router.get("/store/products/{product_id}")
@@ -906,7 +906,7 @@ async def create_order(order: OrderCreate, user: dict = Depends(get_current_user
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.orders.insert_one(order_doc)
-    del order_doc["_id"] if "_id" in order_doc else None
+    order_doc.pop("_id", None)
     return order_doc
 
 @api_router.get("/store/orders")
@@ -940,7 +940,7 @@ async def create_course(course: CourseCreate, user: dict = Depends(get_current_u
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.courses.insert_one(course_doc)
-    del course_doc["_id"] if "_id" in course_doc else None
+    course_doc.pop("_id", None)
     return course_doc
 
 @api_router.get("/courses/{course_id}")
