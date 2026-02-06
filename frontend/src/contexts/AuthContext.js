@@ -42,7 +42,13 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (data) => {
     const response = await axios.post(`${API}/auth/register`, data);
-    const { token, user: userData } = response.data;
+    const { token, user: userData, status, message } = response.data;
+    
+    // If account is pending approval (no token returned)
+    if (status === 'pending' || !token) {
+      return { status: 'pending', message };
+    }
+    
     localStorage.setItem('token', token);
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     setUser(userData);
