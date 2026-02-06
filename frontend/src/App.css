@@ -1,34 +1,97 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* GreenForge OS - Global Styles */
+
+/* Remove default margins */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+/* App container */
+.App {
+  min-height: 100vh;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+/* Primary button glow */
+.btn-glow {
+  box-shadow: 0 0 20px rgba(46, 139, 87, 0.4);
+  transition: box-shadow 0.3s ease;
 }
 
-.App-link {
-    color: #61dafb;
+.btn-glow:hover {
+  box-shadow: 0 0 30px rgba(46, 139, 87, 0.6);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Focus visible outline */
+*:focus-visible {
+  outline: 2px solid hsl(146, 50%, 36%);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(46, 139, 87, 0.3);
+  color: white;
+}
+
+/* Placeholder color */
+::placeholder {
+  color: hsl(0, 0%, 45%);
+}
+
+/* Image placeholder */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Table improvements */
+table {
+  border-collapse: collapse;
+}
+
+/* Form elements reset */
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Link reset */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* List reset */
+ul, ol {
+  list-style: none;
 }
