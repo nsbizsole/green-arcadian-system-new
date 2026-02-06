@@ -80,7 +80,7 @@ const Dashboard = () => {
       {/* Header */}
       <div>
         <h1 className="font-heading text-2xl lg:text-3xl font-bold text-white">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Welcome back! Here's your business overview.</p>
+        <p className="text-muted-foreground mt-1">Welcome back! Here is your business overview.</p>
       </div>
 
       {/* Stats Grid */}
