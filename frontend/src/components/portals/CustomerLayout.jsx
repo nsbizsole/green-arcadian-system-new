@@ -1,0 +1,100 @@
+import { useState } from 'react';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { LayoutDashboard, ShoppingBag, User, LogOut, Menu, Leaf, ChevronRight, ExternalLink, ShoppingCart } from 'lucide-react';
+import { useCart } from '../../contexts/CartContext';
+import { Button } from '../ui/button';
+import { ScrollArea } from '../ui/scroll-area';
+
+const navItems = [
+  { path: '/customer', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+  { path: '/customer/orders', icon: ShoppingBag, label: 'My Orders' },
+  { path: '/customer/profile', icon: User, label: 'Profile' },
+];
+
+const CustomerLayout = () => {
+  const { user, logout } = useAuth();
+  const { itemCount } = useCart();
+  const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleLogout = () => { logout(); navigate('/'); };
+
+  return (
+    <div className="min-h-screen bg-paper flex">
+      {sidebarOpen && <div className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />}
+
+      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-primary/10 transform transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="flex flex-col h-full">
+          <div className="p-6 border-b border-primary/10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                <Leaf className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="font-ui font-bold text-primary">Green Arcadian</h1>
+                <p className="text-xs text-primary/60">Customer Portal</p>
+              </div>
+            </div>
+          </div>
+
+          <ScrollArea className="flex-1 py-4">
+            <nav className="px-3 space-y-1">
+              {navItems.map((item) => (
+                <NavLink key={item.path} to={item.path} end={item.exact} onClick={() => setSidebarOpen(false)}
+                  className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-ui text-sm ${isActive ? 'bg-primary text-white' : 'text-primary/70 hover:bg-primary/5'}`}>
+                  {({ isActive }) => (<><item.icon className="w-5 h-5" /><span className="flex-1">{item.label}</span>{isActive && <ChevronRight className="w-4 h-4" />}</>)}
+                </NavLink>
+              ))}
+            </nav>
+            
+            <div className="px-3 mt-6">
+              <Link to="/shop" className="flex items-center gap-3 px-4 py-3 bg-accent/10 rounded-lg text-primary hover:bg-accent/20 transition-colors">
+                <ShoppingCart className="w-5 h-5" />
+                <span className="flex-1 font-ui text-sm">Shop Now</span>
+                {itemCount > 0 && <span className="w-5 h-5 bg-terracotta text-white text-xs rounded-full flex items-center justify-center">{itemCount}</span>}
+              </Link>
+            </div>
+          </ScrollArea>
+
+          <div className="p-4 border-t border-primary/10">
+            <div className="flex items-center gap-3 mb-4 p-3 bg-surface/50 rounded-lg">
+              <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                <span className="text-primary font-bold">{user?.full_name?.charAt(0)}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-primary truncate">{user?.full_name}</p>
+                <p className="text-xs text-primary/60">Customer</p>
+              </div>
+            </div>
+            <Button variant="ghost" className="w-full justify-start text-primary/60" onClick={handleLogout}>
+              <LogOut className="w-4 h-4 mr-2" /> Sign Out
+            </Button>
+          </div>
+        </div>
+      </aside>
+
+      <main className="flex-1 min-w-0">
+        <header className="sticky top-0 z-30 h-16 bg-paper/80 backdrop-blur-sm border-b border-primary/10">
+          <div className="flex items-center justify-between h-full px-4 lg:px-8">
+            <Button variant="ghost" size="icon" className="lg:hidden text-primary" onClick={() => setSidebarOpen(true)}>
+              <Menu className="w-6 h-6" />
+            </Button>
+            <div className="ml-auto flex items-center gap-4">
+              <Link to="/cart" className="relative p-2 hover:bg-primary/5 rounded-full">
+                <ShoppingCart className="w-5 h-5 text-primary" />
+                {itemCount > 0 && <span className="absolute -top-1 -right-1 w-5 h-5 bg-terracotta text-white text-xs rounded-full flex items-center justify-center">{itemCount}</span>}
+              </Link>
+              <Link to="/" target="_blank" className="text-sm text-primary/60 hover:text-primary flex items-center gap-1">
+                <ExternalLink className="w-4 h-4" /> Website
+              </Link>
+            </div>
+          </div>
+        </header>
+        <div className="p-4 lg:p-8"><Outlet /></div>
+      </main>
+    </div>
+  );
+};
+
+export default CustomerLayout;
